@@ -3,6 +3,8 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace SimpleUsers.WebAPI.Providers
 {
+    #pragma warning disable 1591
+    
     public class TokenProviderOptions
     {
         public string Path { get; set; } = "/api/User/Login";

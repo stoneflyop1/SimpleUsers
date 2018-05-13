@@ -2,18 +2,37 @@ using System;
 
 namespace SimpleUsers.Core.Models
 {
+    /// <summary>
+    /// API的返回信息
+    /// </summary>
     public class ApiResult
     {
+        /// <summary>
+        /// 是否成功
+        /// </summary>
+        /// <returns></returns>
         public bool Ok {get;set;}
-
+        /// <summary>
+        /// 出错信息
+        /// </summary>
+        /// <returns></returns>
         public string Err {get;set;}
 
     }
-
+    /// <summary>
+    /// API的返回信息
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class ApiResult<T> : ApiResult
     {
+        /// <summary>
+        /// API返回的数据
+        /// </summary>
+        /// <returns></returns>
         public T Data {get;set;}
     }
+
+    #pragma warning disable 1591
 
     public static class ApiResultUtil
     {

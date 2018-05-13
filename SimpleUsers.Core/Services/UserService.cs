@@ -5,29 +5,33 @@ using SimpleUsers.Core.Models;
 
 namespace SimpleUsers.Core.Services
 {
+    /// <summary>
+    /// 用户相关接口
+    /// </summary>
     public interface IUserService
     {
         /// <summary>
-        /// 
+        /// 注册
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
         Task RegisterAsync(RegisterModel model);
         /// <summary>
-        /// 
+        /// 登录
         /// </summary>
         /// <param name="userName"></param>
         /// <param name="password"></param>
         /// <returns></returns>
         Task<UserDto> LoginAsync(string userName, string password);
         /// <summary>
-        /// 
+        /// 更新用户信息
         /// </summary>
+        /// <param name="userId"></param>
         /// <param name="model"></param>
         /// <returns></returns>
         Task UpdateInfoAsync(string userId, UserInfoModel model);
         /// <summary>
-        /// 
+        /// 获取用户信息
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>

@@ -22,6 +22,8 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace SimpleUsers.WebAPI
 {
+    #pragma warning disable 1591
+    
     public class Startup
     {
         public Startup(IConfiguration configuration)

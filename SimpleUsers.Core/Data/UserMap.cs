@@ -4,6 +4,8 @@ using SimpleUsers.Core.Entities;
 
 namespace SimpleUsers.Core.Data
 {
+    #pragma warning disable 1591
+    
     public class UserMap : IEntityTypeConfiguration<User>
     {
         public void Configure(EntityTypeBuilder<User> builder)

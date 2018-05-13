@@ -4,13 +4,14 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace SimpleUsers.WebAPI.Providers
 {
+    #pragma warning disable 1591
+    
     public class TokenUtil
     {
         public static readonly string SecretKey = "mysupersecret_secretkey!123";
 
         // https://stackoverflow.com/questions/37708266/bearer-token-authentication-in-asp-net-core
         //https://github.com/aspnet/Security/issues/1310
-        // Add JWT¡¡Protection
         public static TokenValidationParameters Create()
         {
             var signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(SecretKey));

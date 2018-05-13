@@ -7,6 +7,8 @@ using SimpleUsers.Core.Models;
 
 namespace SimpleUsers.WebAPI.Providers
 {
+    #pragma warning disable 1591
+    
     public class TokenProvider
     {
         private readonly TokenProviderOptions _options;

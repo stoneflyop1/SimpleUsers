@@ -14,6 +14,9 @@ using SimpleUsers.WebAPI.Providers;
 
 namespace SimpleUsers.WebAPI.Controllers
 {
+    /// <summary>
+    /// 用户相关操作入口
+    /// </summary>
     [Authorize]
     [Route("api/[controller]")]
     public class UserController : Controller
@@ -21,12 +24,19 @@ namespace SimpleUsers.WebAPI.Controllers
         private readonly IUserService _userService;
         private readonly ILogger _logger;
 
+#pragma warning disable 1591
         public UserController(IUserService userService, ILoggerFactory logFactory)
         {
             _userService = userService;
             _logger = logFactory.CreateLogger<UserController>();
         }
+#pragma warning restore 1591
 
+        /// <summary>
+        /// 用户注册
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [Route("Register")]
         [AllowAnonymous]
         [HttpPost]
@@ -48,6 +58,11 @@ namespace SimpleUsers.WebAPI.Controllers
             }            
         }
 
+        /// <summary>
+        /// 用户登录
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [Route("Login")]
         [AllowAnonymous]
         [HttpPost]
@@ -79,6 +94,11 @@ namespace SimpleUsers.WebAPI.Controllers
             
         }
 
+        /// <summary>
+        /// 更新用户信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [Route("UserInfo")]
         [HttpPost]
         public async Task<ApiResult> UpdateUserInfo([FromBody]UserInfoModel model)
@@ -110,6 +130,10 @@ namespace SimpleUsers.WebAPI.Controllers
             
         }
 
+        /// <summary>
+        /// 获取用户信息
+        /// </summary>
+        /// <returns></returns>
         [Route("UserInfo")]
         [HttpGet]
         public async Task<ApiResult<UserDto>> GetUserInfo()

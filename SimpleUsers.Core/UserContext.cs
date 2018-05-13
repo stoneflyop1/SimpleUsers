@@ -6,6 +6,8 @@ using SimpleUsers.Core.Entities;
 
 namespace SimpleUsers.Core
 {
+    #pragma warning disable 1591
+    
     public class UserContext : DbContext
     {
         public UserContext(DbContextOptions options):base(options) {}

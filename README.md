@@ -32,6 +32,15 @@
     ```sh
     dotnet add SimpleUsers.WebAPI/SimpleUsers.WebAPI.csproj reference SimpleUsers.Core/SimpleUsers.Core.csproj
     ```
+1. 在项目文件中添加如下代码(以SimpleUsers.WebAPI项目为例)，为项目启用XML的注释功能
+    ```xml
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+        <DocumentationFile>bin\Debug\netcoreapp2.0\SimpleUsers.WebAPI.xml</DocumentationFile>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+        <DocumentationFile>bin\Release\netcoreapp2.0\SimpleUsers.WebAPI.xml</DocumentationFile>
+    </PropertyGroup>
+    ```
 1. 为VS添加sln文件(可选)
     ```sh
     dotnet new sln
