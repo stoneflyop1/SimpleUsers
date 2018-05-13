@@ -8,7 +8,7 @@ using SimpleUsers.Core.Models;
 namespace SimpleUsers.WebAPI.Providers
 {
     #pragma warning disable 1591
-    
+
     public class TokenProvider
     {
         private readonly TokenProviderOptions _options;
@@ -19,9 +19,9 @@ namespace SimpleUsers.WebAPI.Providers
 
         public TokenEntity GenerateToken(UserDto user)
         {
-            var identity = GetIdentity(user);
-            if (identity == null)
-                return null;
+            // var identity = GetIdentity(user);
+            // if (identity == null)
+            //     return null;
 
             DateTime now = DateTime.UtcNow;
             var claims = new Claim[]
@@ -49,13 +49,13 @@ namespace SimpleUsers.WebAPI.Providers
             };
             return response;
         }
-        private ClaimsIdentity GetIdentity(UserDto user)
-        {
-            return new ClaimsIdentity(
-                new System.Security.Principal.GenericIdentity(user.UserName, "Token"),
-                new [] { new Claim(ClaimTypes.Name, user.UserName),
-                    new Claim(ClaimTypes.NameIdentifier, user.UserId) });
-        }
+        // private ClaimsIdentity GetIdentity(UserDto user)
+        // {
+        //     return new ClaimsIdentity(
+        //         new System.Security.Principal.GenericIdentity(user.UserName, "Token"),
+        //         new [] { new Claim(ClaimTypes.Name, user.UserName),
+        //             new Claim(ClaimTypes.NameIdentifier, user.UserId) });
+        // }
         public static long ToUnixEpochDate(DateTime date)
             => (long)Math.Round((date.ToUniversalTime() - new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero)).TotalSeconds);
 
