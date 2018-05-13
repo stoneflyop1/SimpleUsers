@@ -14,10 +14,11 @@ using Microsoft.Extensions.Options;
 using Microsoft.Extensions.PlatformAbstractions;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Serialization;
-//using Swashbuckle.AspNetCore.Swagger;
+using Swashbuckle.AspNetCore.Swagger;
 using SimpleUsers.Core;
 using SimpleUsers.Core.Services;
 using SimpleUsers.WebAPI.Providers;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace SimpleUsers.WebAPI
 {
@@ -52,21 +53,21 @@ namespace SimpleUsers.WebAPI
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IPasswordHasher, PasswordHasher>();
             services.AddScoped<DbContext, UserContext>();
-            // services.AddSwaggerGen(c =>
-            // {
-            //     c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
-            //     c.IncludeXmlComments(GetXmlCommentsPath());
-            // });
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
+                AddXmlComments(c);
+            });
         }
 
-        // private void AddXmlComments(SwaggerGenOptions c)
-		// {
-		// 	var app = PlatformServices.Default.Application;
-        //     var xm1 = System.IO.Path.Combine(app.ApplicationBasePath, "SimpleUsers.WebAPI.xml");
-		// 	c.IncludeXmlComments(xm1);
-		// 	var xml2 = System.IO.Path.Combine(app.ApplicationBasePath, "SimpleUsers.Core.xml");
-		// 	c.IncludeXmlComments(xml2);
-		// }
+        private void AddXmlComments(SwaggerGenOptions c)
+		{
+			var app = PlatformServices.Default.Application;
+            var xm1 = System.IO.Path.Combine(app.ApplicationBasePath, "SimpleUsers.WebAPI.xml");
+			c.IncludeXmlComments(xm1);
+			var xml2 = System.IO.Path.Combine(app.ApplicationBasePath, "SimpleUsers.Core.xml");
+			c.IncludeXmlComments(xml2);
+		}
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
@@ -81,6 +82,12 @@ namespace SimpleUsers.WebAPI
 
             app.UseAuthentication();
             app.UseMvc();
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            });
 
             // https://docs.microsoft.com/en-us/ef/core/get-started/aspnetcore/new-db
             // Loading sample data.
