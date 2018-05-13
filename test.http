@@ -14,13 +14,25 @@ POST http://localhost:5000/api/User/Login HTTP/1.1
 Content-Type: application/json
 
 {
-    "userName": "admin",
-    "password": "1"
+    "userName": "test",
+    "password": "111111"
 }
 
 
 ### GetUserInfo
 
 GET http://localhost:5000/api/User/UserInfo HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwcm4iOiI2MmEzMzAxYy0zMzI1LTQ0YjktYTllMS03ZjJlYzI4NDc4ZDYiLCJzdWIiOiJhZG1pbiIsImp0aSI6IjRhMzBhNWFjLWJkMjQtNDgwYS04YTU4LWIwZGE2NjQyZjM4OSIsImlhdCI6MTUyNjE5NTEzMCwibmJmIjoxNTI2MTk1MTI5LCJleHAiOjE1MjYyMjUxMjksImlzcyI6IlNpbXBsZVVzZXJzIiwiYXVkIjoiU2ltcGxlVXNlcnNBdWRpZW5jZSJ9.RQr1qDUCwh4F4JRcw896CHWhrbJYvs1vXjDco9WhOfo
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwcm4iOiJlNzQyNmY1ZS0yY2NiLTQ4MDktODZjNy1iY2EzODE3ZjE1OTQiLCJzdWIiOiJ0ZXN0IiwianRpIjoiMDNlY2MyZmEtMzk3Zi00MGNlLTkyZDYtYmUwMTBkZTNiODJlIiwiaWF0IjoxNTI2MTk4OTUwLCJuYmYiOjE1MjYxOTg5NTAsImV4cCI6MTUyNjIyODk1MCwiaXNzIjoiU2ltcGxlVXNlcnMiLCJhdWQiOiJTaW1wbGVVc2Vyc0F1ZGllbmNlIn0.JMLwPidWNHpHfOnFygz1SPoHzGekO7dekpXD--P9yag
+
+### Update UserInfo
+
+POST http://localhost:5000/api/User/UserInfo HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwcm4iOiJlNzQyNmY1ZS0yY2NiLTQ4MDktODZjNy1iY2EzODE3ZjE1OTQiLCJzdWIiOiJ0ZXN0IiwianRpIjoiMDNlY2MyZmEtMzk3Zi00MGNlLTkyZDYtYmUwMTBkZTNiODJlIiwiaWF0IjoxNTI2MTk4OTUwLCJuYmYiOjE1MjYxOTg5NTAsImV4cCI6MTUyNjIyODk1MCwiaXNzIjoiU2ltcGxlVXNlcnMiLCJhdWQiOiJTaW1wbGVVc2Vyc0F1ZGllbmNlIn0.JMLwPidWNHpHfOnFygz1SPoHzGekO7dekpXD--P9yag
+
+{
+    "name": "测试",
+    "mobile": "13900000000",
+    "email": "test1@test.com"
+}
 

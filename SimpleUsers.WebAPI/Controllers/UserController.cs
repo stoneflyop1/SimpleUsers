@@ -81,7 +81,7 @@ namespace SimpleUsers.WebAPI.Controllers
 
         [Route("UserInfo")]
         [HttpPost]
-        public async Task<ApiResult> UpdateUserInfo(UserInfoModel model)
+        public async Task<ApiResult> UpdateUserInfo([FromBody]UserInfoModel model)
         {
             var identity = User.Identity as ClaimsIdentity;
 

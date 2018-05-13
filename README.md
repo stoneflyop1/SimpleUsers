@@ -12,6 +12,7 @@
 - C# Extensions
 - C# FixFormat
 - C# XML Documentation Comments
+- Rest Client [使用RestClient提交API请求](test.http)
 
 ## 创建步骤
 
