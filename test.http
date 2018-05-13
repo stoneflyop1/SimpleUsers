@@ -1,0 +1,26 @@
+### Register
+
+POST http://localhost:5000/api/User/Register HTTP/1.1
+Content-Type: application/json
+
+{
+    "userName": "test",
+    "password": "111111"
+}
+
+### Login
+
+POST http://localhost:5000/api/User/Login HTTP/1.1
+Content-Type: application/json
+
+{
+    "userName": "admin",
+    "password": "1"
+}
+
+
+### GetUserInfo
+
+GET http://localhost:5000/api/User/UserInfo HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwcm4iOiI2MmEzMzAxYy0zMzI1LTQ0YjktYTllMS03ZjJlYzI4NDc4ZDYiLCJzdWIiOiJhZG1pbiIsImp0aSI6IjRhMzBhNWFjLWJkMjQtNDgwYS04YTU4LWIwZGE2NjQyZjM4OSIsImlhdCI6MTUyNjE5NTEzMCwibmJmIjoxNTI2MTk1MTI5LCJleHAiOjE1MjYyMjUxMjksImlzcyI6IlNpbXBsZVVzZXJzIiwiYXVkIjoiU2ltcGxlVXNlcnNBdWRpZW5jZSJ9.RQr1qDUCwh4F4JRcw896CHWhrbJYvs1vXjDco9WhOfo
+

@@ -334,3 +334,9 @@ ASALocalRun/
 
 # MFractors (Xamarin productivity tool) working folder 
 .mfractor/
+
+
+# sqlite db files
+*.db
+*.sqlite
+*.sqlite3

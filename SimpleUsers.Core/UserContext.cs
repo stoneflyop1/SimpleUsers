@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using System.Linq;
 using System;
+using SimpleUsers.Core.Entities;
 
 namespace SimpleUsers.Core
 {
@@ -25,6 +26,23 @@ namespace SimpleUsers.Core
             }
 
             base.OnModelCreating(modelBuilder);
+        }
+    }
+
+    public class SampleData
+    {
+        public static void AddData(DbContext context)
+        {
+            var user = new User
+            {
+                UserName = "admin",
+                PasswordHash = "1",
+                Name = "管理员",
+                Mobile = "15900000000",
+                Email = "test@test.com"
+            };
+            context.Set<User>().Add(user);
+            context.SaveChanges();
         }
     }
 }
