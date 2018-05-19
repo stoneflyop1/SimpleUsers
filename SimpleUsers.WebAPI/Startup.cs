@@ -36,30 +36,36 @@ namespace SimpleUsers.WebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // EF数据库配置
             var connectionString = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<UserContext>(options => options.UseSqlite(connectionString));            
             
-            var tokenValidationParameters = TokenUtil.Create();
-            //https://forums.asp.net/t/2105147.aspx?Authorization+using+cookies+for+views+and+bearer+tokens+for+json+results
+            // 添加认证，此处使用Bearer的Jwt Token
+            //https://forums.asp.net/t/2105147.aspx?Authorization+using+cookies+for+views+and+bearer+tokens+for+json+results            
             services.AddAuthentication(options =>
             {
                 options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
 
             }).AddJwtBearer(options =>
             {
-                options.TokenValidationParameters = tokenValidationParameters;
+                options.TokenValidationParameters = TokenUtil.Create();
             });
 
+            // MVC设置，此处使用camelCase的Json格式
             services.AddMvc().AddJsonOptions(options => options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver());
-
-            services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IPasswordHasher, PasswordHasher>();
-            services.AddScoped<DbContext, UserContext>();
+            
+            // 添加Swagger
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
                 AddXmlComments(c);
             });
+
+
+            // 添加自定义服务接口及实现
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IPasswordHasher, PasswordHasher>();
+            services.AddScoped<DbContext, UserContext>();
         }
 
         private void AddXmlComments(SwaggerGenOptions c)
@@ -74,6 +80,7 @@ namespace SimpleUsers.WebAPI
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            // 日志设置
             //loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
@@ -81,23 +88,30 @@ namespace SimpleUsers.WebAPI
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseExceptionHandler();
+            }
 
+            // 使用认证
             app.UseAuthentication();
+            // 使用MVC
             app.UseMvc();
 
+            // 使用Swagger
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
             });
 
+            // 程序启动时，添加可能的示例数据
             // https://docs.microsoft.com/en-us/ef/core/get-started/aspnetcore/new-db
-            // Loading sample data.
             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
                 var dbContext = serviceScope.ServiceProvider.GetService<DbContext>();
                 bool hasCreated = dbContext.Database.EnsureCreated();
-                if (hasCreated)
+                if (hasCreated) // 仅在第一次创建数据库时添加样例数据
                 {
                     SampleData.AddData(dbContext);
                 }
