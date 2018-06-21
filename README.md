@@ -6,6 +6,8 @@
 
 ## VS Code准备
 
+此项目完全使用vs code开发。
+
 安装如下扩展(一般打开过C#文件的话，前两个扩展应该安装好了)
 
 - C#
@@ -32,7 +34,7 @@
     ```sh
     dotnet add SimpleUsers.WebAPI/SimpleUsers.WebAPI.csproj reference SimpleUsers.Core/SimpleUsers.Core.csproj
     ```
-1. 在项目文件中添加如下代码(以SimpleUsers.WebAPI项目为例)，为项目启用XML的注释功能
+1. 在项目文件中添加如下代码(以SimpleUsers.WebAPI项目为例)，为项目启用XML的注释功能(方便Swagger制作API文档)
     ```xml
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
         <DocumentationFile>bin\Debug\netcoreapp2.0\SimpleUsers.WebAPI.xml</DocumentationFile>
@@ -78,4 +80,11 @@
 .net core 相比.net framework更加模块化。
 
 - 自带依赖注入(IServiceCollection)
-- 全新的程序配置方式(IConfiguration)
+- 全新的程序配置方式(IConfiguration)，支持多种文件格式配置以及环境变量配置等
+
+## 后续
+
+- [EF数据库迁移(DbMigration)](https://msdn.microsoft.com/en-us/data/jj591621.aspx#initializer)
+- 使用Autofac依赖注入，可以参考我在读一本书时的[示例](https://github.com/stoneflyop1/MuscleFellow)
+- [使用razor pages制作页面](https://docs.microsoft.com/en-us/aspnet/core/tutorials/razor-pages/razor-pages-start?view=aspnetcore-2.0)
+- [使用IdentityServer4实现OAuth及第三方登录](https://github.com/IdentityServer/IdentityServer4)
