@@ -72,3 +72,10 @@
     ```sh
     dotnet add SimpleUsers.WebAPI/SimpleUsers.WebAPI.csproj package Microsoft.EntityFrameworkCore
     ```
+
+## .net core
+
+.net core 相比.net framework更加模块化。
+
+- 自带依赖注入(IServiceCollection)
+- 全新的程序配置方式(IConfiguration)
