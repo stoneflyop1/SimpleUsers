@@ -2,6 +2,9 @@
 
 以WebAPI方式实现了一个简单的用户系统，包括用户的注册、登录、获取或更新用户信息等功能。
 
+- 以用户系统为例的增改查操作(EF，数据库使用Sqlite)
+- API文档生成使用Swagger
+
 [MIT授权](LICENSE)
 
 ## VS Code准备
@@ -17,6 +20,11 @@
 - Rest Client [使用RestClient提交API请求](test.http)
 
 ## 创建步骤
+
+注意：
+
+- 微软已发布dotnetcore 2.1，需要从2.0升级到2.1版，因为2.0并不是长期支持版本。
+- dotnet build貌似不会拷贝appSettings.json等配置文件到生成目录，需要用dotnet publish
 
 如何使用dotnet cli可以参考[官方文档](https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet?tabs=netcore2x)
 
@@ -37,10 +45,10 @@
 1. 在项目文件中添加如下代码(以SimpleUsers.WebAPI项目为例)，为项目启用XML的注释功能(方便Swagger制作API文档)
     ```xml
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-        <DocumentationFile>bin\Debug\netcoreapp2.0\SimpleUsers.WebAPI.xml</DocumentationFile>
+        <DocumentationFile>bin\Debug\netcoreapp2.1\SimpleUsers.WebAPI.xml</DocumentationFile>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-        <DocumentationFile>bin\Release\netcoreapp2.0\SimpleUsers.WebAPI.xml</DocumentationFile>
+        <DocumentationFile>bin\Release\netcoreapp2.1\SimpleUsers.WebAPI.xml</DocumentationFile>
     </PropertyGroup>
     ```
 1. 为VS添加sln文件(可选)
@@ -86,5 +94,5 @@
 
 - [EF数据库迁移(DbMigration)](https://msdn.microsoft.com/en-us/data/jj591621.aspx#initializer)
 - 使用Autofac依赖注入，可以参考我在读一本书时的[示例](https://github.com/stoneflyop1/MuscleFellow)
-- [使用razor pages制作页面](https://docs.microsoft.com/en-us/aspnet/core/tutorials/razor-pages/razor-pages-start?view=aspnetcore-2.0)
+- [使用razor pages制作页面](https://docs.microsoft.com/en-us/aspnet/core/tutorials/razor-pages/razor-pages-start?view=aspnetcore-2.1)
 - [使用IdentityServer4实现OAuth及第三方登录](https://github.com/IdentityServer/IdentityServer4)

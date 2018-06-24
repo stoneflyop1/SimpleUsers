@@ -35,7 +35,7 @@ namespace SimpleUsers.WebAPI.Controllers
         /// <summary>
         /// 用户注册
         /// </summary>
-        /// <param name="model"></param>
+        /// <param name="model">注册实体模型</param>
         /// <returns></returns>
         [Route("Register")]
         [AllowAnonymous]
@@ -61,7 +61,7 @@ namespace SimpleUsers.WebAPI.Controllers
         /// <summary>
         /// 用户登录
         /// </summary>
-        /// <param name="model"></param>
+        /// <param name="model">登陆实体模型</param>
         /// <returns></returns>
         [Route("Login")]
         [AllowAnonymous]

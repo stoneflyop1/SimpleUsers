@@ -11,7 +11,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Microsoft.Extensions.PlatformAbstractions;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Serialization;
 using Swashbuckle.AspNetCore.Swagger;
@@ -19,6 +18,8 @@ using SimpleUsers.Core;
 using SimpleUsers.Core.Services;
 using SimpleUsers.WebAPI.Providers;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 namespace SimpleUsers.WebAPI
 {
@@ -38,6 +39,10 @@ namespace SimpleUsers.WebAPI
         {
             // EF数据库配置
             var connectionString = Configuration.GetConnectionString("DefaultConnection");
+            if (connectionString == null)
+            {
+                throw new Exception("ConnectionString is null...");
+            }
             services.AddDbContext<UserContext>(options => options.UseSqlite(connectionString));            
             
             // 添加认证，此处使用Bearer的Jwt Token
@@ -52,7 +57,9 @@ namespace SimpleUsers.WebAPI
             });
 
             // MVC设置，此处使用camelCase的Json格式
-            services.AddMvc().AddJsonOptions(options => options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver());
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1).AddJsonOptions(options => 
+                options.SerializerSettings.ContractResolver = 
+                    new CamelCasePropertyNamesContractResolver());
             
             // 添加Swagger
             services.AddSwaggerGen(c =>
@@ -70,10 +77,10 @@ namespace SimpleUsers.WebAPI
 
         private void AddXmlComments(SwaggerGenOptions c)
 		{
-			var app = PlatformServices.Default.Application;
-            var xm1 = System.IO.Path.Combine(app.ApplicationBasePath, "SimpleUsers.WebAPI.xml");
+			var appPath = System.AppContext.BaseDirectory; //PlatformServices.Default.Application;
+            var xm1 = System.IO.Path.Combine(appPath, "SimpleUsers.WebAPI.xml");
 			c.IncludeXmlComments(xm1);
-			var xml2 = System.IO.Path.Combine(app.ApplicationBasePath, "SimpleUsers.Core.xml");
+			var xml2 = System.IO.Path.Combine(appPath, "SimpleUsers.Core.xml");
 			c.IncludeXmlComments(xml2);
 		}
 
@@ -90,7 +97,8 @@ namespace SimpleUsers.WebAPI
             }
             else
             {
-                app.UseExceptionHandler();
+                app.UseExceptionHandler("/Error");
+                app.UseHsts();
             }
 
             // 使用认证
