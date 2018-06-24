@@ -90,6 +90,30 @@
 - 自带依赖注入(IServiceCollection)
 - 全新的程序配置方式(IConfiguration)，支持多种文件格式配置以及环境变量配置等
 
+## 单元测试
+
+- [dotnetcore中使用xUnit进行单元测试](https://docs.microsoft.com/en-us/dotnet/core/testing/unit-testing-with-dotnet-test)
+- [使用InMemory的EF进行单元测试](https://garywoodfine.com/entity-framework-core-memory-testing-database/)
+
+步骤：
+
+1. 创建单元测试文件夹
+    ```sh
+    mkdir SimpleUsers.Tests
+    ```
+2. 添加单元测试项目以及引用Core类库
+    ```sh
+    cd SimpleUsers.Tests
+    dotnet new xunit
+    dotnet add reference ..\SimpleUsers.Core\SimpleUsers.Core.csproj
+    ```
+3. 添加单元测试类
+4. 执行单元测试
+    ```sh
+    cd ..
+    dotnet test
+    ```
+
 ## 后续
 
 - [EF数据库迁移(DbMigration)](https://msdn.microsoft.com/en-us/data/jj591621.aspx#initializer)
