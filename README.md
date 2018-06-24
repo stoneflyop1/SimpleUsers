@@ -5,6 +5,8 @@
 - 以用户系统为例的增改查操作(EF，数据库使用Sqlite)
 - API文档生成使用Swagger
 
+关于.NET core的详细资料，建议看看[.NET Core官方文档](https://docs.microsoft.com/en-us/dotnet/core/), 以及[Introduction to ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/?view=aspnetcore-2.1)。
+
 [MIT授权](LICENSE)
 
 ## VS Code准备
