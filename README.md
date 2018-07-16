@@ -130,4 +130,4 @@
 - 使用Autofac依赖注入，可以参考我在读一本书时的[示例](https://github.com/stoneflyop1/MuscleFellow)
 - [使用razor pages制作页面](https://docs.microsoft.com/en-us/aspnet/core/tutorials/razor-pages/razor-pages-start?view=aspnetcore-2.1)
 - [使用IdentityServer4实现OAuth及第三方登录](https://github.com/IdentityServer/IdentityServer4)
-- 微服务化，[微软的官方示例指南](https://docs.microsoft.com/en-us/dotnet/standard/microservices-architecture/)，[一个开源的微服务框架](https://github.com/ThreeMammals/Ocelot)
+- 微服务化，[微软的官方示例指南](https://docs.microsoft.com/en-us/dotnet/standard/microservices-architecture/)，[一个开源的微服务框架](https://github.com/ThreeMammals/Ocelot)，[gRPC中使用C#](https://grpc.io/docs/quickstart/csharp.html)
