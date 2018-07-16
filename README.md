@@ -116,6 +116,14 @@
     dotnet test
     ```
 
+## docker支持
+
+[Dockerfile](Dockerfile)为生成docker镜像的脚本文件
+
+1. 通过带有SDK的基础镜像(`Build`)还原nuget包、编译、发布DLL
+2. 把`Build`镜像中发布的DLL拷贝到只有运行时的镜像(`Runtime`)，设置docker的入口脚本
+3. 通过生成脚本生成和执行docker（[Windows](build.ps1)以及[Linux](build.sh)）
+
 ## 后续
 
 - [EF数据库迁移(DbMigration)](https://msdn.microsoft.com/en-us/data/jj591621.aspx#initializer)
