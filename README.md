@@ -118,7 +118,7 @@
 
 ## docker支持
 
-[Dockerfile](Dockerfile)为生成docker镜像的脚本文件
+[Dockerfile](Dockerfile)为生成docker镜像的脚本文件，一些常用的.net的Dockerfile可以参考[微软官方的示例](https://github.com/dotnet/dotnet-docker/)。
 
 1. 通过带有SDK的基础镜像(`Build`)还原nuget包、编译、发布DLL
 2. 把`Build`镜像中发布的DLL拷贝到只有运行时的镜像(`Runtime`)，设置docker的入口脚本
