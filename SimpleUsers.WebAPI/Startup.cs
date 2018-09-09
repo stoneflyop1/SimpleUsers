@@ -10,15 +10,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Serialization;
 using Swashbuckle.AspNetCore.Swagger;
 using SimpleUsers.Core;
 using SimpleUsers.Core.Services;
 using SimpleUsers.WebAPI.Providers;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace SimpleUsers.WebAPI
@@ -87,16 +84,14 @@ namespace SimpleUsers.WebAPI
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            // 日志设置
-            //loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             }
             else
             {
+                loggerFactory.AddDebug();
                 app.UseExceptionHandler("/Error");
                 app.UseHsts();
             }
