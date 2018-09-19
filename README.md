@@ -69,6 +69,10 @@
     ```sh
     dotnet add SimpleUsers.Core/SimpleUsers.Core.csproj package Microsoft.CSharp
     ```
+1. 添加日志支持
+    ```sh
+    dotnet add SimpleUsers.Core/SimpleUsers.Core.csproj package Microsoft.Extensions.Logging.Abstractions
+    ```
 
 ### 为WebAPI项目添加引用
 
@@ -80,7 +84,11 @@
     ```sh
     dotnet add SimpleUsers.WebAPI/SimpleUsers.WebAPI.csproj package Swashbuckle.AspNetCore
     ```
-1. 若EF版本与Core不一致，可以添加EF
+1. 添加NLog日志支持
+    ```sh
+    dotnet add SimpleUsers.WebAPI/SimpleUsers.WebAPI.csproj package NLog.Web.AspNetCore
+    ```
+2. 若EF版本与Core不一致，可以添加EF
     ```sh
     dotnet add SimpleUsers.WebAPI/SimpleUsers.WebAPI.csproj package Microsoft.EntityFrameworkCore
     ```

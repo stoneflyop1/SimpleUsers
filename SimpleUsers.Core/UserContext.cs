@@ -33,7 +33,7 @@ namespace SimpleUsers.Core
 
     public class SampleData
     {
-        public static void AddData(DbContext context)
+        public static int AddData(DbContext context)
         {
             var user = new User
             {
@@ -44,7 +44,7 @@ namespace SimpleUsers.Core
                 Email = "test@test.com"
             };
             context.Set<User>().Add(user);
-            context.SaveChanges();
+            return context.SaveChanges();
         }
     }
 }

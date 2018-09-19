@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using SimpleUsers.Core.Entities;
 using SimpleUsers.Core.Models;
 
@@ -44,15 +45,18 @@ namespace SimpleUsers.Core.Services
     {
         private readonly DbContext _db;
         private readonly IPasswordHasher _passHasher;
+        private readonly ILogger _log;
 
-        public UserService(DbContext db, IPasswordHasher passHasher)
+        public UserService(DbContext db, IPasswordHasher passHasher, ILogger<UserService> logger)
         {
             _db = db;
             _passHasher = passHasher;
+            _log = logger;
         }
 
         public async Task<UserDto> GetInfoAsync(string userId)
         {
+            _log.LogInformation($"Get UserInfo: {userId}");
             var user = await _db.Set<User>().FindAsync(userId);
             if (user == null) return null;
             return new UserDto{
@@ -66,6 +70,7 @@ namespace SimpleUsers.Core.Services
 
         public async Task<UserDto> LoginAsync(string userName, string password)
         {
+            _log.LogInformation($"User Login: {userName}");
             var passHash = _passHasher.HashPassword(password);
             var user = await _db.Set<User>().FirstOrDefaultAsync(u => 
                 u.UserName == userName && u.PasswordHash == passHash);
@@ -81,6 +86,7 @@ namespace SimpleUsers.Core.Services
 
         public async Task RegisterAsync(RegisterModel model)
         {
+            _log.LogInformation($"User Register: {model.UserName}");
             var passHash = _passHasher.HashPassword(model.Password);
             var user = new User{UserName = model.UserName, PasswordHash = passHash};
             await _db.Set<User>().AddAsync(user);
@@ -89,6 +95,7 @@ namespace SimpleUsers.Core.Services
 
         public async Task UpdateInfoAsync(string userId, UserInfoModel model)
         {
+            _log.LogInformation($"Update UserInfo: {userId}");
             var user = await _db.Set<User>().FindAsync(userId);
             if (user == null) return;
             user.Email = model.Email;
