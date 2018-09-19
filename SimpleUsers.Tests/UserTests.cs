@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using SimpleUsers.Core;
 using SimpleUsers.Core.Models;
 using SimpleUsers.Core.Entities;
+using Microsoft.Extensions.Logging;
 
 namespace SimpleUsers.Tests
 {
@@ -14,6 +15,7 @@ namespace SimpleUsers.Tests
 
         private readonly DbContext _db;
         private readonly IUserService _userService;
+        private readonly ILoggerFactory _logFactory;
 
         public UserTests()
         {
@@ -22,7 +24,8 @@ namespace SimpleUsers.Tests
                 .UseInMemoryDatabase(Guid.NewGuid().ToString())
                 .EnableSensitiveDataLogging().Options;
             _db = new UserContext(options);
-            _userService = new UserService(_db, _hasher);
+            _logFactory = new LoggerFactory();
+            _userService = new UserService(_db, _hasher, _logFactory.CreateLogger<UserService>());
         }
 
         [Fact]
