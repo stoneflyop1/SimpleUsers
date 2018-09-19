@@ -80,11 +80,11 @@
     ```sh
     dotnet add SimpleUsers.WebAPI/SimpleUsers.WebAPI.csproj package Microsoft.EntityFrameworkCore.Sqlite
     ```
-1. 添加Swagger.net
+1. 添加[Swagger.net]以便自动生成API文档(https://docs.microsoft.com/en-us/aspnet/core/tutorials/getting-started-with-swashbuckle?view=aspnetcore-2.1&tabs=visual-studio%2Cvisual-studio-xml)
     ```sh
     dotnet add SimpleUsers.WebAPI/SimpleUsers.WebAPI.csproj package Swashbuckle.AspNetCore
     ```
-1. 添加NLog日志支持
+1. 添加[NLog日志](https://github.com/NLog/NLog.Web/wiki/Getting-started-with-ASP.NET-Core-2)支持
     ```sh
     dotnet add SimpleUsers.WebAPI/SimpleUsers.WebAPI.csproj package NLog.Web.AspNetCore
     ```
@@ -99,6 +99,7 @@
 
 - 自带依赖注入(IServiceCollection)
 - 全新的程序配置方式(IConfiguration)，支持多种文件格式配置以及环境变量配置等
+- 自带日志功能(ILoggerFactory)
 
 ## 单元测试
 
@@ -115,7 +116,7 @@
     ```sh
     cd SimpleUsers.Tests
     dotnet new xunit
-    dotnet add reference ..\SimpleUsers.Core\SimpleUsers.Core.csproj
+    dotnet add reference ../SimpleUsers.Core/SimpleUsers.Core.csproj
     ```
 3. 添加单元测试类
 4. 执行单元测试
