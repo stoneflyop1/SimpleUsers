@@ -101,6 +101,38 @@
 - 全新的程序配置方式(IConfiguration)，支持多种文件格式配置以及环境变量配置等
 - 自带日志功能(ILoggerFactory)
 
+Startup类：
+
+```csharp
+    public class Startup
+    {
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+        // 程序的配置
+        public IConfiguration Configuration { get; }
+
+        // 引入(Add)需要的服务(EF,MVC,Identity,Authentication etc)，包括数据库上下文、依赖注入等
+        public void ConfigureServices(IServiceCollection services)
+        {
+            var connectionString = Configuration.GetConnectionString("DefaultConnection");
+            ...
+            services.AddMvc();
+            ...
+        }
+        // 启动(Use)需要的服务，如：(EF,MVC,Identity,Authentication, Logging etc)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        {
+            loggerFactory.AddDebug();
+            ...
+            app.UseMvc();
+            ...
+        }
+
+    }
+```
+
 ## 单元测试
 
 - [dotnetcore中使用xUnit进行单元测试](https://docs.microsoft.com/en-us/dotnet/core/testing/unit-testing-with-dotnet-test)

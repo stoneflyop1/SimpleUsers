@@ -35,7 +35,6 @@ namespace SimpleUsers.WebAPI
                 NLog.LogManager.Shutdown();
             }
             //CreateWebHostBuilder(args).Build().Run();
-            //CreateWebHostBuilder(args).Build().Run();
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>

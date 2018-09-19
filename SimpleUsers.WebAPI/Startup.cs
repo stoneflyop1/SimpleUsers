@@ -87,11 +87,11 @@ namespace SimpleUsers.WebAPI
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+                loggerFactory.AddDebug();                
             }
             else
             {
-                loggerFactory.AddDebug();
+                loggerFactory.AddConsole(Configuration.GetSection("Logging"));
                 app.UseExceptionHandler("/Error");
                 app.UseHsts();
             }

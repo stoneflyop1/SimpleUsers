@@ -14,12 +14,14 @@ using SimpleUsers.WebAPI.Providers;
 
 namespace SimpleUsers.WebAPI.Controllers
 {
+    // https://docs.microsoft.com/en-us/aspnet/core/web-api/?view=aspnetcore-2.1
     /// <summary>
     /// 用户相关操作入口
     /// </summary>
     [Authorize]
     [Route("api/[controller]")]
-    public class UserController : Controller
+    [ApiController]
+    public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
         private readonly ILogger _logger;
@@ -40,7 +42,7 @@ namespace SimpleUsers.WebAPI.Controllers
         [Route("Register")]
         [AllowAnonymous]
         [HttpPost]
-        public async Task<ApiResult> Register([FromBody]RegisterModel model)
+        public async Task<ApiResult> Register(RegisterModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -66,7 +68,7 @@ namespace SimpleUsers.WebAPI.Controllers
         [Route("Login")]
         [AllowAnonymous]
         [HttpPost]
-        public async Task<ApiResult<TokenEntity>> Login([FromBody]LoginModel model)
+        public async Task<ApiResult<TokenEntity>> Login(LoginModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -101,7 +103,7 @@ namespace SimpleUsers.WebAPI.Controllers
         /// <returns></returns>
         [Route("UserInfo")]
         [HttpPost]
-        public async Task<ApiResult> UpdateUserInfo([FromBody]UserInfoModel model)
+        public async Task<ApiResult> UpdateUserInfo(UserInfoModel model)
         {
             var identity = User.Identity as ClaimsIdentity;
 
