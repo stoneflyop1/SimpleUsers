@@ -165,6 +165,132 @@ Startup类：
 2. 把`Build`镜像中发布的DLL拷贝到只有运行时的镜像(`Runtime`)，设置docker的入口脚本
 3. 通过生成脚本生成和执行docker（[Windows](build.ps1)以及[Linux](build.sh)）
 
+## Linux部署
+
+详细指南可参考[微软官方文档](https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/linux-nginx?tabs=aspnetcore2x&view=aspnetcore-2.1)。
+
+以Ubuntu为例：
+
+### 准备Linux环境
+
+Linux环境的依赖安装可以参考[微软官方文档](https://docs.microsoft.com/en-us/dotnet/core/linux-prerequisites?tabs=netcore2x)。
+
+依赖库可以通过各个Linux发行版的包管理命令行查看，若没有安装，需要先安装依赖库。比如libcurl：
+
+```
+dpkg -l | grep libcurl
+# if not exist, search package by name
+apt-cache search libcurl | grep ^libcurl
+sudo apt-get install libcurl4
+```
+
+安装dotnet core runtime/sdk
+
+1. 注册微软的Key和Feed
+```sh
+wget -q https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb
+sudo dpkg -i packages-microsoft-prod.deb
+```
+2. 安装.net sdk
+    ```
+    sudo apt-get install apt-transport-https
+    sudo apt-get update
+    sudo apt-get install dotnet-sdk-2.1
+    ```
+
+### 发布和执行dotnet core程序
+
+1. dotnet core程序发布
+    ```sh
+    dotnet publish -c Release # bin/Release/netcoreapp2.1/publish
+    ```
+2. 拷贝发布好的程序到需要部署的文件夹
+    ```
+    cd bin/Release/netcoreapp2.1/publish
+    mkdir ~/dotnetapps/SimpleUsers && cp -r . ~/dotnetapps/SimpleUsers
+    ```
+3. 执行dotnet core程序
+    ```sh
+    dotnet SimpleUsers.WebAPI.dll
+    ```
+
+### 使用systemd制作系统服务
+
+#### 1.安装nginx服务器
+
+```sh
+sudo apt-get install nginx
+```
+
+#### 2.准备系统服务
+
+service(SimpleUsers.servie)的定义文件如下：
+
+```ini
+[Unit]
+Description=SimpleUsers WebAPI running on Ubuntu
+
+[Service]
+WorkingDirectory=/home/test/dotnetapps/SimpleUsers
+# you can exec `which dotnet` to get the dotnet exe path
+ExecStart=/usr/bin/dotnet /home/test/dotnetapps/SimpleUsers/SimpleUsers.WebAPI.dll
+Restart=always
+# Restart service after 10 seconds if the dotnet service crashes:
+RestartSec=10
+KillSignal=SIGINT
+SyslogIdentifier=SimpleUsers-WebAPI
+# must be in nginx worker-process usergroup
+User=test
+# add some Environment Variables
+Environment=ASPNETCORE_ENVIRONMENT=Production
+Environment=DOTNET_PRINT_TELEMETRY_MESSAGE=false
+
+[Install]
+WantedBy=multi-user.target
+```
+
+启用服务
+```sh
+sudo cp SimpleUsers.service /etc/systemd/system/
+sudo systemctl enable SimpleUsers.servie # 启用
+sudo systemctl start SimpleUsers.servie # 启动
+sudo systemctl status SimpleUsers.servie # 查看状态
+sudo journalctl -fu SimpleUsers.servie --since "2018-9-23" --until "2018-10-18 04:00" # 查看日志
+```
+
+注：为了更新部署的程序方便，我们把dotnet应用程序放到了当前用户的目录下，而且程序执行也以当前用户的身份执行。但为了使用nginx反向代理，我们需要把当前用户加入到nginx服务的用户组里：
+
+```sh
+sudo usermod -a -G www-data $(whoami)
+```
+
+#### 3.使用nginx反向代理
+
+nginx配置文件(`/etc/nginx/sites-available/default`)
+
+```nginx
+server {
+    listen        80 default_server;
+    server_name   _; # example.com *.example.com;
+    location / {
+        proxy_pass         http://localhost:5000;
+        proxy_http_version 1.1;
+        proxy_set_header   Upgrade $http_upgrade;
+        proxy_set_header   Connection keep-alive;
+        proxy_set_header   Host $host;
+        proxy_cache_bypass $http_upgrade;
+        proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header   X-Forwarded-Proto $scheme;
+    }
+}
+```
+
+```sh
+# after reconfig, restart nginx
+sudo service nginx restart
+```
+
+
 ## 后续
 
 - [EF数据库迁移(DbMigration)](https://msdn.microsoft.com/en-us/data/jj591621.aspx#initializer)
