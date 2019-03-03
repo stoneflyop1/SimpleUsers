@@ -10,7 +10,7 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/SimpleUsers.WebAPI/bin/Debug/netcoreapp2.1/SimpleUsers.WebAPI.dll",
+            "program": "${workspaceFolder}/SimpleUsers.WebAPI/bin/Debug/netcoreapp2.2/SimpleUsers.WebAPI.dll",
             "args": [],
             "cwd": "${workspaceFolder}/SimpleUsers.WebAPI",
             "stopAtEntry": false,

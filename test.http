@@ -1,4 +1,4 @@
-@host = localhost:5000
+@host = localhost:50000
 
 ### Register
 POST http://{{host}}/api/User/Register HTTP/1.1
