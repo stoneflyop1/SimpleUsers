@@ -2,10 +2,10 @@
 
 以WebAPI方式实现了一个简单的用户系统，包括用户的注册、登录、获取或更新用户信息等功能。
 
-- 以用户系统为例的增改查操作(EF，数据库使用Sqlite)
+- 以用户系统为例的增改查操作(EF，数据库使用mysql，采用docker镜像，见[sql镜像](sql/))
 - API文档生成使用Swagger
 
-关于.NET core的详细资料，建议看看[.NET Core官方文档](https://docs.microsoft.com/en-us/dotnet/core/), 以及[Introduction to ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/?view=aspnetcore-2.1)。
+关于.NET core的详细资料，建议看看[.NET Core官方文档](https://docs.microsoft.com/en-us/dotnet/core/), 以及[Introduction to ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/?view=aspnetcore-2.2)。
 
 [MIT授权](LICENSE)
 
@@ -25,7 +25,6 @@
 
 注意：
 
-- 微软已发布dotnetcore 2.1，需要从2.0升级到2.1版，因为2.0并不是长期支持版本。
 - dotnet build貌似不会拷贝appSettings.json等配置文件到生成目录，需要用dotnet publish
 
 如何使用dotnet cli可以参考[官方文档](https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet?tabs=netcore2x)
@@ -36,24 +35,24 @@
     ```sh
     dotnet new classlib -f netstandard2.0 -o SimpleUsers.Core
     ```
-1. 创建webapi项目
+2. 创建webapi项目
     ```sh
     dotnet new webapi -o SimpleUsers.WebAPI
     ```
-1. 添加引用关系(WebAPI引用Core)
+3. 添加引用关系(WebAPI引用Core)
     ```sh
     dotnet add SimpleUsers.WebAPI/SimpleUsers.WebAPI.csproj reference SimpleUsers.Core/SimpleUsers.Core.csproj
     ```
-1. 在项目文件中添加如下代码(以SimpleUsers.WebAPI项目为例)，为项目启用XML的注释功能(方便Swagger制作API文档)
+4. 在项目文件中添加如下代码(以SimpleUsers.WebAPI项目为例)，为项目启用XML的注释功能(方便Swagger制作API文档)
     ```xml
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-        <DocumentationFile>bin\Debug\netcoreapp2.1\SimpleUsers.WebAPI.xml</DocumentationFile>
+        <DocumentationFile>bin\Debug\netcoreapp2.2\SimpleUsers.WebAPI.xml</DocumentationFile>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-        <DocumentationFile>bin\Release\netcoreapp2.1\SimpleUsers.WebAPI.xml</DocumentationFile>
+        <DocumentationFile>bin\Release\netcoreapp2.2\SimpleUsers.WebAPI.xml</DocumentationFile>
     </PropertyGroup>
     ```
-1. 为VS添加sln文件(可选)
+5. 为VS添加sln文件(可选)
     ```sh
     dotnet new sln
     dotnet sln SimpleUsers.sln add SimpleUsers.Core/SimpleUsers.Core.csproj SimpleUsers.WebAPI/SimpleUsers.WebAPI.csproj
@@ -80,7 +79,7 @@
     ```sh
     dotnet add SimpleUsers.WebAPI/SimpleUsers.WebAPI.csproj package Microsoft.EntityFrameworkCore.Sqlite
     ```
-1. 添加[Swagger.net](https://docs.microsoft.com/en-us/aspnet/core/tutorials/getting-started-with-swashbuckle?view=aspnetcore-2.1&tabs=visual-studio%2Cvisual-studio-xml)以便自动生成API文档
+1. 添加[Swagger.net](https://docs.microsoft.com/en-us/aspnet/core/tutorials/getting-started-with-swashbuckle?view=aspnetcore-2.2&tabs=visual-studio%2Cvisual-studio-xml)以便自动生成API文档
     ```sh
     dotnet add SimpleUsers.WebAPI/SimpleUsers.WebAPI.csproj package Swashbuckle.AspNetCore
     ```
@@ -122,9 +121,8 @@ Startup类：
             ...
         }
         // 启动(Use)需要的服务，如：(EF,MVC,Identity,Authentication, Logging etc)
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            loggerFactory.AddDebug();
             ...
             app.UseMvc();
             ...
@@ -161,9 +159,24 @@ Startup类：
 
 [Dockerfile](Dockerfile)为生成docker镜像的脚本文件，一些常用的.net的Dockerfile可以参考[微软官方的示例](https://github.com/dotnet/dotnet-docker/)。
 
+最简单的使用方式是：`docker-compose`
+
+```sh
+docker-compose build
+docker-compose up
+...
+docker-compose down
+```
+
 1. 通过带有SDK的基础镜像(`Build`)还原nuget包、编译、发布DLL
 2. 把`Build`镜像中发布的DLL拷贝到只有运行时的镜像(`Runtime`)，设置docker的入口脚本
 3. 通过生成脚本生成和执行docker（[Windows](build.ps1)以及[Linux](build.sh)）
+
+注：[删除不再使用的镜像](https://stackoverflow.com/questions/40084044/how-to-remove-docker-images-based-on-name)
+
+```ps1
+docker rmi $(docker images --format "{{.Repository}}:{{.Tag}}"|findstr "dotnetusers")
+```
 
 ## Linux部署
 
@@ -184,7 +197,7 @@ apt-cache search libcurl | grep ^libcurl
 sudo apt-get install libcurl4
 ```
 
-安装dotnet core runtime/sdk
+[安装dotnet core runtime/sdk](https://dotnet.microsoft.com/download/linux-package-manager/ubuntu18-04/sdk-current)
 
 1. 注册微软的Key和Feed
 ```sh
@@ -193,10 +206,13 @@ sudo dpkg -i packages-microsoft-prod.deb
 ```
 2. 安装.net sdk
     ```
+    sudo add-apt-repository universe
     sudo apt-get install apt-transport-https
     sudo apt-get update
-    sudo apt-get install dotnet-sdk-2.1
+    sudo apt-get install dotnet-sdk-2.2
     ```
+
+
 
 ### 发布和执行dotnet core程序
 
@@ -206,7 +222,7 @@ sudo dpkg -i packages-microsoft-prod.deb
     ```
 2. 拷贝发布好的程序到需要部署的文件夹
     ```
-    cd bin/Release/netcoreapp2.1/publish
+    cd bin/Release/netcoreapp2.2/publish
     mkdir ~/dotnetapps/SimpleUsers && cp -r . ~/dotnetapps/SimpleUsers
     ```
 3. 执行dotnet core程序

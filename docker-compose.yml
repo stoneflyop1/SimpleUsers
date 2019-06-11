@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+  db:
+    build: 
+      context: ./sql
+      args:
+        SQL_PASS: 123456
+    image: dotnetusers/db
+    ports:
+      - "3306:3306"
+    container_name: dotnetuserdb
+  web:
+    build: 
+      context: .
+      args: 
+        CONN_STR: Server=db;Database=dotnetusers;Uid=root;Pwd=123456;CHARSET=utf8;
+    image: dotnetusers/webapp
+    ports:
+      - "5000:80"
+    container_name: dotnetuserapp
+    depends_on: 
+      - db

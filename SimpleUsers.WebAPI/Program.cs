@@ -37,8 +37,13 @@ namespace SimpleUsers.WebAPI
             //CreateWebHostBuilder(args).Build().Run();
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
+        public static IWebHostBuilder CreateWebHostBuilder(string[] args) 
+        {
+            var config = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddCommandLine(args).AddEnvironmentVariables()
+            .Build();
+            return WebHost.CreateDefaultBuilder(args).UseConfiguration(config)
                 .UseStartup<Startup>()
                 .ConfigureLogging(logging =>
                 {
@@ -46,9 +51,6 @@ namespace SimpleUsers.WebAPI
                     logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
                 })
                 .UseNLog();  // NLog: setup NLog for Dependency injection
-
-        //public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-        //    WebHost.CreateDefaultBuilder(args)
-        //        .UseStartup<Startup>();
+        }
     }
 }

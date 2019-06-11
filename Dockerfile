@@ -1,24 +1,25 @@
 # https://github.com/dotnet/dotnet-docker/blob/master/samples/aspnetapp/Dockerfile.alpine-x64
 
-FROM microsoft/dotnet:2.1-sdk-alpine AS build
-WORKDIR /app
+FROM microsoft/dotnet:2.2-sdk-alpine3.8 AS build
+WORKDIR /src
 
 # copy csproj and restore as distinct layers
-COPY *.sln .
-COPY SimpleUsers.Core/*.csproj ./SimpleUsers.Core/
-COPY SimpleUsers.WebAPI/*.csproj ./SimpleUsers.WebAPI/
-COPY SimpleUsers.Tests/*.csproj ./SimpleUsers.Tests/
-RUN dotnet restore
+COPY ["SimpleUsers.Core/SimpleUsers.Core.csproj","SimpleUsers.Core/"]
+COPY ["SimpleUsers.WebAPI/SimpleUsers.WebAPI.csproj", "SimpleUsers.WebAPI/"]
+RUN dotnet restore "SimpleUsers.WebAPI/SimpleUsers.WebAPI.csproj"
 
 # copy everything else and build app
-COPY SimpleUsers.Core/. ./SimpleUsers.Core/
-COPY SimpleUsers.WebAPI/. ./SimpleUsers.WebAPI/
-COPY SimpleUsers.Tests/. ./SimpleUsers.Tests/
-WORKDIR /app/SimpleUsers.WebAPI
-RUN dotnet publish -c Release -o out
-
-
-FROM microsoft/dotnet:2.1-aspnetcore-runtime-alpine AS runtime
+COPY . .
+WORKDIR /src/SimpleUsers.WebAPI
+RUN dotnet publish "SimpleUsers.WebAPI.csproj" -c Release -o /app
 WORKDIR /app
-COPY --from=build /app/SimpleUsers.WebAPI/out ./
-ENTRYPOINT ["dotnet", "SimpleUsers.WebAPI.dll"]
+
+
+
+FROM microsoft/dotnet:2.2-aspnetcore-runtime-alpine3.8 AS runtime
+ARG CONN_STR
+ENV ConnectionStrings:DefaultConnection=$CONN_STR
+WORKDIR /app
+EXPOSE 80
+COPY --from=build /app .
+CMD ["dotnet", "SimpleUsers.WebAPI.dll"]

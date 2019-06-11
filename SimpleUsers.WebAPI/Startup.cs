@@ -29,7 +29,7 @@ namespace SimpleUsers.WebAPI
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }        
+        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -40,7 +40,7 @@ namespace SimpleUsers.WebAPI
             {
                 throw new Exception("ConnectionString is null...");
             }
-            services.AddDbContext<UserContext>(options => options.UseSqlite(connectionString));            
+            services.AddDbContext<UserContext>(options => options.UseMySql(connectionString));
             
             // 添加认证，此处使用Bearer的Jwt Token
             //https://forums.asp.net/t/2105147.aspx?Authorization+using+cookies+for+views+and+bearer+tokens+for+json+results            
@@ -54,7 +54,7 @@ namespace SimpleUsers.WebAPI
             });
 
             // MVC设置，此处使用camelCase的Json格式
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1).AddJsonOptions(options => 
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2).AddJsonOptions(options => 
                 options.SerializerSettings.ContractResolver = 
                     new CamelCasePropertyNamesContractResolver());
             
@@ -82,16 +82,14 @@ namespace SimpleUsers.WebAPI
 		}
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                loggerFactory.AddDebug();                
             }
             else
             {
-                loggerFactory.AddConsole(Configuration.GetSection("Logging"));
                 app.UseExceptionHandler("/Error");
                 app.UseHsts();
             }
@@ -108,17 +106,17 @@ namespace SimpleUsers.WebAPI
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
             });
 
-            // 程序启动时，添加可能的示例数据
-            // https://docs.microsoft.com/en-us/ef/core/get-started/aspnetcore/new-db
-            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
-            {
-                var dbContext = serviceScope.ServiceProvider.GetService<DbContext>();
-                bool hasCreated = dbContext.Database.EnsureCreated();
-                if (hasCreated) // 仅在第一次创建数据库时添加样例数据
-                {
-                    SampleData.AddData(dbContext);
-                }
-            }
+            // // 程序启动时，添加可能的示例数据
+            // // https://docs.microsoft.com/en-us/ef/core/get-started/aspnetcore/new-db
+            // using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            // {
+            //    var dbContext = serviceScope.ServiceProvider.GetService<DbContext>();
+            //    bool hasCreated = dbContext.Database.EnsureCreated();
+            //    if (hasCreated) // 仅在第一次创建数据库时添加样例数据
+            //    {
+            //        SampleData.AddData(dbContext);
+            //    }
+            // }
         }
     }
 }
