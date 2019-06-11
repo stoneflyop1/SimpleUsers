@@ -131,6 +131,10 @@ Startup类：
     }
 ```
 
+## 代码规范和最佳实践检查
+
+可以使用[Microsoft.CodeAnalysis.FxCopAnalyzers](https://github.com/dotnet/roslyn-analyzers/wiki)来做初期的代码审查。
+
 ## 单元测试
 
 - [dotnetcore中使用xUnit进行单元测试](https://docs.microsoft.com/en-us/dotnet/core/testing/unit-testing-with-dotnet-test)
@@ -139,10 +143,12 @@ Startup类：
 步骤：
 
 1. 创建单元测试文件夹
+
     ```sh
     mkdir SimpleUsers.Tests
     ```
 2. 添加单元测试项目以及引用Core类库
+
     ```sh
     cd SimpleUsers.Tests
     dotnet new xunit
@@ -150,6 +156,7 @@ Startup类：
     ```
 3. 添加单元测试类
 4. 执行单元测试
+
     ```sh
     cd ..
     dotnet test
@@ -190,7 +197,7 @@ Linux环境的依赖安装可以参考[微软官方文档](https://docs.microsof
 
 依赖库可以通过各个Linux发行版的包管理命令行查看，若没有安装，需要先安装依赖库。比如libcurl：
 
-```
+```sh
 dpkg -l | grep libcurl
 # if not exist, search package by name
 apt-cache search libcurl | grep ^libcurl
@@ -200,11 +207,13 @@ sudo apt-get install libcurl4
 [安装dotnet core runtime/sdk](https://dotnet.microsoft.com/download/linux-package-manager/ubuntu18-04/sdk-current)
 
 1. 注册微软的Key和Feed
-```sh
-wget -q https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb
-sudo dpkg -i packages-microsoft-prod.deb
-```
+
+    ```sh
+    wget -q https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb
+    sudo dpkg -i packages-microsoft-prod.deb
+    ```
 2. 安装.net sdk
+
     ```
     sudo add-apt-repository universe
     sudo apt-get install apt-transport-https
@@ -217,15 +226,18 @@ sudo dpkg -i packages-microsoft-prod.deb
 ### 发布和执行dotnet core程序
 
 1. dotnet core程序发布
+
     ```sh
     dotnet publish -c Release # bin/Release/netcoreapp2.1/publish
     ```
 2. 拷贝发布好的程序到需要部署的文件夹
+
     ```
     cd bin/Release/netcoreapp2.2/publish
     mkdir ~/dotnetapps/SimpleUsers && cp -r . ~/dotnetapps/SimpleUsers
     ```
 3. 执行dotnet core程序
+
     ```sh
     dotnet SimpleUsers.WebAPI.dll
     ```
@@ -266,6 +278,7 @@ WantedBy=multi-user.target
 ```
 
 启用服务
+
 ```sh
 sudo cp SimpleUsers.service /etc/systemd/system/
 sudo systemctl enable SimpleUsers.servie # 启用
@@ -305,7 +318,6 @@ server {
 # after reconfig, restart nginx
 sudo service nginx restart
 ```
-
 
 ## 后续
 
