@@ -8,6 +8,7 @@ namespace SimpleUsers.Core.Data
     
     public class UserMap : IEntityTypeConfiguration<User>
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods")]
         public void Configure(EntityTypeBuilder<User> builder)
         {
             builder.HasKey(b => b.Id);

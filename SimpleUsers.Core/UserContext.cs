@@ -31,10 +31,11 @@ namespace SimpleUsers.Core
         }
     }
 
-    public class SampleData
+    public static class SampleData
     {
         public static int AddData(DbContext context)
         {
+            if (context == null) throw new ArgumentNullException(nameof(context));
             var user = new User
             {
                 UserName = "admin",

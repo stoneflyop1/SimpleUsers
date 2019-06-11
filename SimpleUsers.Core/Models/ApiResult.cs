@@ -58,6 +58,7 @@ namespace SimpleUsers.Core.Models
 
         public static string GetMessage(Exception ex)
         {
+            if (ex == null) throw new ArgumentNullException(nameof(ex));
             while(ex.InnerException != null)
             {
                 ex = ex.InnerException;
@@ -67,11 +68,13 @@ namespace SimpleUsers.Core.Models
 
         public static ApiResult Fail(Exception ex)
         {
+            if (ex == null) throw new ArgumentNullException(nameof(ex));
             return new ApiResult{Err = GetMessage(ex)};
         }
 
         public static ApiResult<T> Fail<T>(Exception ex)
         {
+            if (ex == null) throw new ArgumentNullException(nameof(ex));
             return new ApiResult<T>{Err = GetMessage(ex)};
         }
     }

@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using SimpleUsers.Core.Entities;
@@ -40,6 +41,10 @@ namespace SimpleUsers.Core.Services
     }
 
 #pragma warning disable 1591
+// https://github.com/dotnet-architecture/eShopOnContainers/issues/515
+// https://blog.stephencleary.com/2017/03/aspnetcore-synchronization-context.html
+// https://thinkrethink.net/2017/10/30/asp-net-core-correct-usage-of-configureawait-with-asyncawait/
+#pragma warning disable CA2007
 
     public class UserService : IUserService
     {
@@ -86,6 +91,7 @@ namespace SimpleUsers.Core.Services
 
         public async Task RegisterAsync(RegisterModel model)
         {
+            if (model == null) throw new ArgumentNullException(nameof(model));
             _log.LogInformation($"User Register: {model.UserName}");
             var passHash = _passHasher.HashPassword(model.Password);
             var user = new User{UserName = model.UserName, PasswordHash = passHash};
@@ -95,6 +101,8 @@ namespace SimpleUsers.Core.Services
 
         public async Task UpdateInfoAsync(string userId, UserInfoModel model)
         {
+            if (userId == null) throw new ArgumentNullException(nameof(userId));
+            if (model == null) throw new ArgumentNullException(nameof(model));
             _log.LogInformation($"Update UserInfo: {userId}");
             var user = await _db.Set<User>().FindAsync(userId);
             if (user == null) return;
