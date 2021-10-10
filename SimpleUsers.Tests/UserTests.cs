@@ -41,7 +41,7 @@ namespace SimpleUsers.Tests
             };
             _userService.RegisterAsync(model).Wait();
             var user = _db.Set<User>().FirstOrDefaultAsync(u => u.UserName == userName).Result;
-            Assert.NotNull(user);            
+            Assert.NotNull(user);
 
             // Login
             var dto = _userService.LoginAsync(userName, password).Result;

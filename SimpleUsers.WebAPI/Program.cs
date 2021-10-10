@@ -12,7 +12,7 @@ using NLog.Web;
 namespace SimpleUsers.WebAPI
 {
     #pragma warning disable 1591
-    public class Program
+    public static class Program
     {
         public static void Main(string[] args)
         {

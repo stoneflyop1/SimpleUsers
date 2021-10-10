@@ -6,7 +6,7 @@ namespace SimpleUsers.WebAPI.Providers
 {
     #pragma warning disable 1591
     
-    public class TokenUtil
+    public static class TokenUtil
     {
         public static readonly string SecretKey = "mysupersecret_secretkey!123";
 

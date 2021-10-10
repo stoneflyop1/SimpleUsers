@@ -3,6 +3,7 @@ using System.Reflection;
 using System.Linq;
 using System;
 using SimpleUsers.Core.Entities;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace SimpleUsers.Core
 {
@@ -15,19 +16,15 @@ namespace SimpleUsers.Core
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             var assembly = Assembly.GetExecutingAssembly();
-            //https://stackoverflow.com/questions/503263/how-to-determine-if-a-type-implements-a-specific-generic-interface-type
-            var typesToRegister = assembly.GetTypes()
-            .Where(type => !String.IsNullOrEmpty(type.Namespace))
-            .Where(type => type.GetInterfaces().Any(x => x.IsGenericType &&
-                x.GetGenericTypeDefinition() == typeof(IEntityTypeConfiguration<>)));
-            foreach (var type in typesToRegister)
-            {
-                // https://stackoverflow.com/questions/22864790/using-system-dynamic-in-roslyn
-                dynamic configurationInstance = Activator.CreateInstance(type);
-                modelBuilder.ApplyConfiguration(configurationInstance);
-            }
+            modelBuilder.ApplyConfigurationsFromAssembly(assembly);
 
             base.OnModelCreating(modelBuilder);
+            // https://stackoverflow.com/questions/59134406/unable-to-track-an-entity-of-type-because-primary-key-property-id-is-null
+            var keysProperties = modelBuilder.Model.GetEntityTypes().Select(x => x.FindPrimaryKey()).SelectMany(x => x.Properties);
+            foreach (var property in keysProperties)
+            {
+                property.ValueGenerated = ValueGenerated.OnAdd;
+            }
         }
     }
 
