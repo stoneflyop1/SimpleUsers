@@ -9,6 +9,7 @@ namespace SimpleUsers.Tests
         private readonly IPasswordHasher _hasher = new PasswordHasher();
 
         [Fact]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1707:Identifiers should not contain underscores", Justification = "<Pending>")]
         public void PasswordHash_OK()
         {
             var pass = "test";

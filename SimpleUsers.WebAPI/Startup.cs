@@ -9,14 +9,11 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Newtonsoft.Json.Serialization;
-using Swashbuckle.AspNetCore.Swagger;
+using Microsoft.Extensions.Hosting;
 using SimpleUsers.Core;
 using SimpleUsers.Core.Services;
 using SimpleUsers.WebAPI.Providers;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using Microsoft.AspNetCore.Mvc;
 
 namespace SimpleUsers.WebAPI
 {
@@ -41,9 +38,9 @@ namespace SimpleUsers.WebAPI
                 throw new Exception("ConnectionString is null...");
             }
             services.AddDbContext<UserContext>(options => options.UseMySql(connectionString));
-            
+
             // 添加认证，此处使用Bearer的Jwt Token
-            //https://forums.asp.net/t/2105147.aspx?Authorization+using+cookies+for+views+and+bearer+tokens+for+json+results            
+            //https://forums.asp.net/t/2105147.aspx?Authorization+using+cookies+for+views+and+bearer+tokens+for+json+results
             services.AddAuthentication(options =>
             {
                 options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -54,14 +51,14 @@ namespace SimpleUsers.WebAPI
             });
 
             // MVC设置，此处使用camelCase的Json格式
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2).AddJsonOptions(options => 
-                options.SerializerSettings.ContractResolver = 
-                    new CamelCasePropertyNamesContractResolver());
+            services.AddControllers().AddJsonOptions(options => 
+                options.JsonSerializerOptions.PropertyNamingPolicy = 
+                    System.Text.Json.JsonNamingPolicy.CamelCase);
             
             // 添加Swagger
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
+                c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "My API", Version = "v1" });
                 AddXmlComments(c);
             });
 
@@ -73,16 +70,16 @@ namespace SimpleUsers.WebAPI
         }
 
         private void AddXmlComments(SwaggerGenOptions c)
-		{
-			var appPath = System.AppContext.BaseDirectory; //PlatformServices.Default.Application;
+        {
+            var appPath = System.AppContext.BaseDirectory; //PlatformServices.Default.Application;
             var xm1 = System.IO.Path.Combine(appPath, "SimpleUsers.WebAPI.xml");
-			c.IncludeXmlComments(xm1);
-			var xml2 = System.IO.Path.Combine(appPath, "SimpleUsers.Core.xml");
-			c.IncludeXmlComments(xml2);
-		}
+            c.IncludeXmlComments(xm1);
+            var xml2 = System.IO.Path.Combine(appPath, "SimpleUsers.Core.xml");
+            c.IncludeXmlComments(xml2);
+        }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -96,8 +93,13 @@ namespace SimpleUsers.WebAPI
 
             // 使用认证
             app.UseAuthentication();
-            // 使用MVC
-            app.UseMvc();
+            // Routing
+            app.UseRouting();
+            app.UseAuthorization();
+            app.UseEndpoints(endpoints => {
+                endpoints.MapDefaultControllerRoute();
+                endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
+            });
 
             // 使用Swagger
             app.UseSwagger();
