@@ -37,7 +37,7 @@ namespace SimpleUsers.WebAPI
             {
                 throw new Exception("ConnectionString is null...");
             }
-            services.AddDbContext<UserContext>(options => options.UseMySql(connectionString));
+            services.AddDbContext<UserContext>(options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
             // 添加认证，此处使用Bearer的Jwt Token
             //https://forums.asp.net/t/2105147.aspx?Authorization+using+cookies+for+views+and+bearer+tokens+for+json+results

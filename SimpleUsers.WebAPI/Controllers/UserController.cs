@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using SimpleUsers.Core.Models;
 using SimpleUsers.Core.Services;
 using SimpleUsers.WebAPI.Providers;
