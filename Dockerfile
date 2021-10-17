@@ -1,6 +1,6 @@
 # https://github.com/dotnet/dotnet-docker/blob/master/samples/aspnetapp/Dockerfile.alpine-x64
 
-FROM mcr.microsoft.com/dotnet/sdk:3.1-alpine AS build
+FROM mcr.microsoft.com/dotnet/sdk:5.0-alpine AS build
 WORKDIR /src
 
 # copy csproj and restore as distinct layers
@@ -16,7 +16,7 @@ WORKDIR /app
 
 
 
-FROM mcr.microsoft.com/dotnet/aspnet:3.1-alpine AS runtime
+FROM mcr.microsoft.com/dotnet/aspnet:5.0-alpine AS runtime
 ARG CONN_STR
 ENV ConnectionStrings:DefaultConnection=$CONN_STR
 WORKDIR /app
